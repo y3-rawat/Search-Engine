@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, render_template
 from googlesearch import search
 
 app = Flask(__name__)
@@ -10,16 +10,19 @@ def twitter_search(position, company):
         results.append(j)
     return results
 
-@app.route('/search', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def search_twitter():
-    position = request.args.get('position')
-    company = request.args.get('company')
+    if request.method == 'POST':
+        position = request.form['position']
+        company = request.form['company']
+        
+        if not position or not company:
+            return render_template('search.html', error="Please provide both position and company.", results=None)
+        
+        results = twitter_search(position, company)
+        return render_template('search.html', results=results)
     
-    if not position or not company:
-        return jsonify({"error": "Please provide both 'position' and 'company' parameters."}), 400
-    
-    results = twitter_search(position, company)
-    return jsonify({"results": results})
+    return render_template('search.html', results=None)
 
 if __name__ == '__main__':
     app.run(debug=True)
