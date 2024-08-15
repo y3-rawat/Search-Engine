@@ -4,7 +4,7 @@ from googlesearch import search
 app = Flask(__name__)
 
 def twitter_search(position, company):
-    query = f'site:twitter.com "{position}" "{company}" in bio'
+    query = f'site:twitter.com "{position}" "{company}" in bio -filter:status'
     results = []
     for j in search(query, num=10, stop=10, pause=2):
         results.append(j)
