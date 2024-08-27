@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Realms</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            cursor: none;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+
+        .realm {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease, transform 1s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: scale(0.95);
+        }
+
+        .realm.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        #linkedinRealm {
+            background: linear-gradient(45deg, #0077B5, #00A0DC);
+        }
+
+        #instagramRealm {
+            background: linear-gradient(45deg, #833AB4, #FD1D1D, #FCAF45);
+        }
+
+        #twitterRealm {
+            background: linear-gradient(45deg, #1DA1F2, #14171A);
+        }
+
+        .influencer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .influencer {
+            transition: all 0.3s ease;
+        }
+
+        .influencer-content {
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .influencer-content:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .influencer-name {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 1.3em;
+        }
+
+        .influencer-role {
+            font-size: 1em;
+            opacity: 0.8;
+            margin-bottom: 12px;
+        }
+
+        .influencer-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+
+        .influencer-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            cursor: none;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1em;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .realm-title {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            z-index: 1000;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s ease;
+        }
+
+        #cursor {
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            z-index: 9999;
+        }
+
+        #cursor::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #fff;
+            opacity: 0.5;
+            transform: scale(1.5);
+            transition: transform 0.3s;
+        }
+
+        #cursor.hover {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        #cursor.hover::after {
+            transform: scale(1);
+        }
+
+        #welcome-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #welcome-modal h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        #welcome-modal p {
+            margin-bottom: 30px;
+        }
+
+        #start-journey {
+            padding: 15px 30px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1em;
+            cursor: none;
+            transition: all 0.3s ease;
+        }
+
+        #start-journey:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .influencer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .influencer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        #company-input-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        #company-input-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        #company-input-form h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        #company-input-form input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        #company-input-form button {
+            padding: 15px 30px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #company-input-form button:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        #user-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            z-index: 1000;
+        }
+        body, html {
+            cursor: none !important;
+        }
+
+        button, a, input[type="text"], input[type="submit"] {
+            cursor: none !important;
+        }
+
+        #cursor {
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            z-index: 9999;
+        }
+
+        #cursor::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #fff;
+            opacity: 0.5;
+            transform: scale(1.5);
+            transition: transform 0.3s;
+        }
+
+        #cursor.hover {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        #cursor.hover::after {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body>
+    <div id="company-input-modal">
+        <form id="company-input-form">
+            <h2>Welcome to Influencer Realms</h2>
+            <input type="text" id="company-name" placeholder="Enter your company name" required>
+            <input type="text" id="company-position" placeholder="Enter your position" required>
+            <button type="submit">Enter</button>
+        </form>
+    </div>
+
+    <div id="user-info" style="display: none;"></div>
+    <div id="container">
+        <div id="linkedinRealm" class="realm active">
+            <h2 class="realm-title">LinkedIn Innovators</h2>
+            <div class="influencer-grid"></div>
+        </div>
+        <div id="instagramRealm" class="realm">
+            <h2 class="realm-title">Instagram Creatives</h2>
+            <div class="influencer-grid"></div>
+        </div>
+        <div id="twitterRealm" class="realm">
+            <h2 class="realm-title">Twitter Thought Leaders</h2>
+            <div class="influencer-grid"></div>
+        </div>
+    </div>
+    <div id="cursor"></div>
+    <div class="navigation">
+        <button class="nav-btn" onclick="changeRealm('linkedin')">LinkedIn</button>
+        <button class="nav-btn" onclick="changeRealm('instagram')">Instagram</button>
+        <button class="nav-btn" onclick="changeRealm('twitter')">Twitter</button>
+    </div>
+    <div id="welcome-modal">
+        <h2>Welcome to Influencer Realms</h2>
+        <p>Explore the world of social media influencers across different platforms. Move your cursor to interact, and use the navigation buttons to switch between realms.</p>
+        <button id="start-journey">Start Your Journey</button>
+    </div>
+
+    <script>
+        const influencers = {
+            linkedin: [
+                { name: "Elon Musk", role: "Tech Visionary", link: "https://www.linkedin.com/in/elonmusk/" },
+                { name: "Sheryl Sandberg", role: "Business Leader", link: "https://www.linkedin.com/in/sheryl-sandberg-5131aa/" },
+                { name: "Richard Branson", role: "Serial Entrepreneur", link: "https://www.linkedin.com/in/rbranson/" }
+            ],
+            instagram: [
+                { name: "Chiara Ferragni", role: "Fashion Icon", link: "https://www.instagram.com/chiaraferragni/" },
+                { name: "Huda Kattan", role: "Beauty Mogul", link: "https://www.instagram.com/hudabeauty/" },
+                { name: "Gary Vaynerchuk", role: "Digital Marketing Guru", link: "https://www.instagram.com/garyvee/" }
+            ],
+            twitter: [
+                { name: "Bill Gates", role: "Tech Philanthropist", link: "https://twitter.com/BillGates" },
+                { name: "Malala Yousafzai", role: "Education Activist", link: "https://twitter.com/Malala" },
+                { name: "Neil deGrasse Tyson", role: "Science Communicator", link: "https://twitter.com/neiltyson" }
+            ]
+        };
+
+        let currentRealm = 'linkedin';
+
+        function createInfluencerElement(influencer) {
+            const element = document.createElement('div');
+            element.className = 'influencer';
+            element.innerHTML = `
+                <div class="influencer-content">
+                    <div class="influencer-name">${influencer.name}</div>
+                    <div class="influencer-role">${influencer.role}</div>
+                    <a href="${influencer.link}" target="_blank" class="influencer-link">Follow</a>
+                </div>
+            `;
+            return element;
+        }
+
+        function populateRealm(realm) {
+            const realmElement = document.getElementById(`${realm}Realm`);
+            const gridElement = realmElement.querySelector('.influencer-grid');
+            gridElement.innerHTML = '';
+            influencers[realm].forEach(influencer => {
+                const element = createInfluencerElement(influencer);
+                gridElement.appendChild(element);
+            });
+        }
+
+        populateRealm('linkedin');
+        populateRealm('instagram');
+        populateRealm('twitter');
+
+        function changeRealm(realm) {
+            document.querySelector('.realm.active').classList.remove('active');
+            document.getElementById(`${realm}Realm`).classList.add('active');
+            currentRealm = realm;
+        }
+
+        const cursor = document.getElementById('cursor');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest('.influencer, .nav-btn, #start-journey')) {
+                cursor.classList.add('hover');
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest('.influencer, .nav-btn, #start-journey')) {
+                cursor.classList.remove('hover');
+            }
+        });
+
+        // Show welcome modal
+        window.addEventListener('load', () => {
+            const welcomeModal = document.getElementById('welcome-modal');
+            welcomeModal.style.opacity = '1';
+        });
+
+        // Hide welcome modal and start journey
+        document.getElementById('start-journey').addEventListener('click', () => {
+            const welcomeModal = document.getElementById('welcome-modal');
+            welcomeModal.style.opacity = '0';
+            setTimeout(() => {
+                welcomeModal.style.display = 'none';
+            }, 500);
+        });
+
+        // Add a farewell message when the user leaves
+        window.addEventListener('beforeunload', (event) => {
+            event.preventDefault();
+            event.returnValue = 'Thanks for exploring Influencer Realms! We hope you enjoyed your journey.';
+        });
+        document.getElementById('company-input-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const companyName = document.getElementById('company-name').value;
+            const companyPosition = document.getElementById('company-position').value;
+            
+            if (companyName && companyPosition) {
+                document.getElementById('company-input-modal').style.display = 'none';
+                document.getElementById('user-info').style.display = 'block';
+                document.getElementById('user-info').textContent = `${companyPosition} at ${companyName}`;
+                
+                // Show welcome modal
+                const welcomeModal = document.getElementById('welcome-modal');
+                welcomeModal.style.opacity = '1';
+            }
+        });
+        
+    </script>
+</body>
+</html>

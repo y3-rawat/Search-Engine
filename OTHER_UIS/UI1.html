@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Influencers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #2c3e50;
+            position: relative;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 2px;
+            background: #2c3e50;
+            margin: 20px auto;
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            position: relative;
+        }
+
+        .platform-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #3498db, #2ecc71, #e74c3c);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            padding: 30px 20px;
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2em;
+            color: #2c3e50;
+            background: #f8f9fa;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .influencer-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .influencer-item {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .influencer-item:last-child {
+            border-bottom: none;
+        }
+
+        .influencer-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .influencer-name {
+            font-weight: 600;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .influencer-role {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .influencer-position {
+            font-size: 0.8em;
+            color: #95a5a6;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .follow-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .follow-link:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3em;
+            }
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .background-shape {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.05;
+        }
+
+        .shape-1 {
+            top: -10%;
+            left: -10%;
+            width: 50%;
+            height: 50%;
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 15s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            bottom: -10%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+            animation: morph 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes morph {
+            0% {
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            }
+            50% {
+                border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+            }
+            100% {
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shape shape-1"></div>
+    <div class="background-shape shape-2"></div>
+
+    <div class="container">
+        <h1>Discover Influential Voices</h1>
+        <div class="recommendations-grid">
+            <!-- LinkedIn Card -->
+            <div class="platform-card">
+                <div class="card-header">LinkedIn Innovators</div>
+                <ul id="linkedinList" class="influencer-list">
+                    <!-- LinkedIn recommendations will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Instagram Card -->
+            <div class="platform-card">
+                <div class="card-header">Instagram Creatives</div>
+                <ul id="instagramList" class="influencer-list">
+                    <!-- Instagram recommendations will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Twitter Card -->
+            <div class="platform-card">
+                <div class="card-header">Twitter Thought Leaders</div>
+                <ul id="twitterList" class="influencer-list">
+                    <!-- Twitter recommendations will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const influencers = {
+            linkedin: [
+                { name: "Elon Musk", role: "Tech Entrepreneur", position: "CEO of Tesla and SpaceX", link: "https://www.linkedin.com/in/elonmusk" },
+                { name: "Sheryl Sandberg", role: "Business Executive", position: "COO of Facebook", link: "https://www.linkedin.com/in/sheryl-sandberg-922aa21" },
+                { name: "Richard Branson", role: "Business Magnate", position: "Founder of Virgin Group", link: "https://www.linkedin.com/in/richardbranson" }
+            ],
+            instagram: [
+                { name: "Chiara Ferragni", role: "Fashion Influencer", position: "Founder of The Blonde Salad", link: "https://www.instagram.com/chiaraferragni" },
+                { name: "Huda Kattan", role: "Beauty Entrepreneur", position: "Founder of Huda Beauty", link: "https://www.instagram.com/huda" },
+                { name: "Gary Vaynerchuk", role: "Entrepreneur", position: "CEO of VaynerMedia", link: "https://www.instagram.com/garyvee" }
+            ],
+            twitter: [
+                { name: "Bill Gates", role: "Philanthropist", position: "Co-founder of Microsoft", link: "https://twitter.com/BillGates" },
+                { name: "Malala Yousafzai", role: "Activist", position: "Nobel Peace Prize Laureate", link: "https://twitter.com/Malala" },
+                { name: "Neil deGrasse Tyson", role: "Astrophysicist", position: "Director of Hayden Planetarium", link: "https://twitter.com/neiltyson" }
+            ]
+        };
+
+        function createInfluencerItem(influencer) {
+            return `
+                <li class="influencer-item">
+                    <div class="influencer-name">${influencer.name}</div>
+                    <div class="influencer-role">${influencer.role}</div>
+                    <div class="influencer-position">${influencer.position}</div>
+                    <a href="${influencer.link}" class="follow-link" target="_blank">Follow</a>
+                </li>
+            `;
+        }
+
+        document.getElementById('linkedinList').innerHTML = influencers.linkedin.map(createInfluencerItem).join('');
+        document.getElementById('instagramList').innerHTML = influencers.instagram.map(createInfluencerItem).join('');
+        document.getElementById('twitterList').innerHTML = influencers.twitter.map(createInfluencerItem).join('');
+    </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Influencers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2ecc71, #e74c3c);
+            margin: 20px auto;
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            position: relative;
+        }
+
+        .platform-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            padding: 20px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5em;
+            color: #fff;
+        }
+
+        .linkedin .card-header { background: linear-gradient(135deg, #0077b5, #00a0dc); }
+        .instagram .card-header { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); }
+        .twitter .card-header { background: linear-gradient(135deg, #1da1f2, #14171a); }
+
+        .influencer-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .influencer-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s ease;
+        }
+
+        .influencer-item:last-child {
+            border-bottom: none;
+        }
+
+        .influencer-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .influencer-name {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .influencer-role {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        .influencer-position {
+            font-size: 0.8em;
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        .profile-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            float: left;
+            margin-right: 15px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .background-shape {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .shape-1 {
+            top: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: #3498db;
+            border-radius: 50%;
+        }
+
+        .shape-2 {
+            bottom: -150px;
+            right: -150px;
+            width: 400px;
+            height: 400px;
+            background: #e74c3c;
+            border-radius: 50%;
+        }
+
+        .shape-3 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: #2ecc71;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shape shape-1"></div>
+    <div class="background-shape shape-2"></div>
+    <div class="background-shape shape-3"></div>
+
+    <div class="container">
+        <h1>Discover Influential Voices</h1>
+        <div class="recommendations-grid">
+            <!-- LinkedIn Card -->
+            <div class="platform-card linkedin">
+                <div class="card-header">LinkedIn Innovators</div>
+                <ul id="linkedinList" class="influencer-list">
+                    <!-- LinkedIn recommendations will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Instagram Card -->
+            <div class="platform-card instagram">
+                <div class="card-header">Instagram Creatives</div>
+                <ul id="instagramList" class="influencer-list">
+                    <!-- Instagram recommendations will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Twitter Card -->
+            <div class="platform-card twitter">
+                <div class="card-header">Twitter Thought Leaders</div>
+                <ul id="twitterList" class="influencer-list">
+                    <!-- Twitter recommendations will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const influencers = {
+            linkedin: [
+                { name: "Elon Musk", role: "Tech Entrepreneur", position: "CEO of Tesla and SpaceX", image: "/api/placeholder/60/60" },
+                { name: "Sheryl Sandberg", role: "Business Executive", position: "COO of Facebook", image: "/api/placeholder/60/60" },
+                { name: "Richard Branson", role: "Business Magnate", position: "Founder of Virgin Group", image: "/api/placeholder/60/60" }
+            ],
+            instagram: [
+                { name: "Chiara Ferragni", role: "Fashion Influencer", position: "Founder of The Blonde Salad", image: "/api/placeholder/60/60" },
+                { name: "Huda Kattan", role: "Beauty Entrepreneur", position: "Founder of Huda Beauty", image: "/api/placeholder/60/60" },
+                { name: "Gary Vaynerchuk", role: "Entrepreneur", position: "CEO of VaynerMedia", image: "/api/placeholder/60/60" }
+            ],
+            twitter: [
+                { name: "Bill Gates", role: "Philanthropist", position: "Co-founder of Microsoft", image: "/api/placeholder/60/60" },
+                { name: "Malala Yousafzai", role: "Activist", position: "Nobel Peace Prize Laureate", image: "/api/placeholder/60/60" },
+                { name: "Neil deGrasse Tyson", role: "Astrophysicist", position: "Director of Hayden Planetarium", image: "/api/placeholder/60/60" }
+            ]
+        };
+
+        function createInfluencerItem(influencer) {
+            return `
+                <li class="influencer-item">
+                    <img src="${influencer.image}" alt="${influencer.name}" class="profile-image">
+                    <div class="influencer-name">${influencer.name}</div>
+                    <div class="influencer-role">${influencer.role}</div>
+                    <div class="influencer-position">${influencer.position}</div>
+                </li>
+            `;
+        }
+
+        document.getElementById('linkedinList').innerHTML = influencers.linkedin.map(createInfluencerItem).join('');
+        document.getElementById('instagramList').innerHTML = influencers.instagram.map(createInfluencerItem).join('');
+        document.getElementById('twitterList').innerHTML = influencers.twitter.map(createInfluencerItem).join('');
+    </script>
+</body>
+</html>
